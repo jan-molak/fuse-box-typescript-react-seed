@@ -2,7 +2,6 @@ const {
     FuseBox,
     SVGPlugin,
     CSSPlugin,
-    BabelPlugin,
     QuantumPlugin,
     WebIndexPlugin,
     Sparky
@@ -12,12 +11,13 @@ let fuse, app, vendor, isProduction;
 
 Sparky.task("config", () => {
     fuse = new FuseBox({
+        // tsConfig: "tsconfig.json",
         homeDir: "src/",
         sourceMaps: !isProduction,
         hash: isProduction,
         output: "dist/$name.js",
         plugins: [
-            SVGPlugin(), CSSPlugin(), BabelPlugin(),
+            SVGPlugin(), CSSPlugin(),
             WebIndexPlugin({
                 template: "src/index.html"
             }),
@@ -28,10 +28,10 @@ Sparky.task("config", () => {
         ]
     });
     // vendor
-    vendor = fuse.bundle("vendor").instructions("~ index.jsx")
+    vendor = fuse.bundle("vendor").instructions("~ index.tsx")
 
     // bundle app
-    app = fuse.bundle("app").instructions("> [index.jsx]")
+    app = fuse.bundle("app").instructions("> [index.tsx]")
 });
 
 Sparky.task("default", ["clean", "config"], () => {
